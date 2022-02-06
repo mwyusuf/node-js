@@ -25,6 +25,41 @@ undefined
 yusuf@Yusufs-MacBook-Pro yusuf-new-folder % vim index.js
 yusuf@Yusufs-MacBook-Pro yusuf-new-folder % node index.js
 hello yusuf
+```
 
+## Basic Component
 
+### Global
+
+- global like window in node.js
+- __dirname => directory file
+- __filename => file name file
+- process => all about environment is stored. ex node version, your platform, etc.
+- exports, module, require => These globals are used for creating and exposing modules throughout your app.
+
+```sh
+yusuf@Yusufs-MacBook-Pro yusuf-new-folder % vim index.js
+yusuf@Yusufs-MacBook-Pro yusuf-new-folder % node index.js 
+/Users/yusuf/yusuf-new-folder /Users/yusuf/yusuf-new-folder/index.js
+```
+
+### Module
+
+A module is a reusable chunk of code that has its own context. That way modules can't interfere with or polute the global scope.
+You can think of them like lego blocks that you can create, import, and share.
+
+```
+// utils.js
+export const action = () => {
+  console.log('ini action');
+}
+
+export const run = () => {
+    console.log('ini run');
+}
+```
+```
+// app.js
+
+import { action, run } from './utils'
 ```
