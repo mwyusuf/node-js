@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/mwyusuf/node-js/issues"
   },
-  "homepage": "https://github.com/mwyusuf/node-js#readme"
+  "homepage": "https://github.com/mwyusuf/node-js#readme",
+  "dependencies": {
+    "loadash": "^1.0.0"
+  }
 }
