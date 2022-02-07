@@ -1,0 +1,19 @@
+{
+  "name": "try_node_js",
+  "version": "1.0.0",
+  "description": "Course Node JS week 3-4",
+  "main": "index.js",
+  "scripts": {
+    "test": "\"echo \\\"Error: no test specified\\\" && exit 1\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mwyusuf/node-js.git"
+  },
+  "author": "yusuf bagus anggara catalyst tech",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mwyusuf/node-js/issues"
+  },
+  "homepage": "https://github.com/mwyusuf/node-js#readme"
+}
