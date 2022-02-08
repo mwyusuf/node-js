@@ -63,3 +63,17 @@ export const run = () => {
 
 import { action, run } from './utils'
 ```
+
+## Server
+
+### Express
+There is an awesome packaged, express, that makes creating servers in Node.js a breeze. We're going to use it now.
+
+npm install express body-parser morgan
+
+express - a framework for building servers
+body-parser - a middleware that parses incoming requests
+morgan = a middleware for logging incoming requests
+With everything installed, we'll create a simple API for a todo app using express.
+
+
