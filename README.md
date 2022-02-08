@@ -253,3 +253,156 @@ app.listen(8000, () => {
   console.log('Server on http://localhost:8000')
 });
 ```
+
+## Testing
+
+
+### Basic Unit Test / Vanila Unit Test
+
+Unit test will test little chunks of your code in isolation to ensure they behave has intended. Node.js ships with the assert module. This module gives us so many utilities that allow us to create expectations of on our code. When those expectations aren't met, assert will throw an error telling us why. This is perfect for testing!.
+
+```js
+// myLib.mjs
+export const add = (num1, num2) => num1 * num2
+```
+
+```js
+// test.mjs
+import assert from 'assert'
+import { add } from './myLib.mjs'
+
+try {
+  console.log('add() should add two numbers ')
+  assert.strictEqual(add(2, 5), 7)
+  console.log('  ✅ passed')
+} catch (e) {
+  console.log('  🚫 fail')
+  console.error(e)
+}
+```
+
+```sh
+yusuf@Yusufs-MacBook-Pro node-js % cd lib 
+yusuf@Yusufs-MacBook-Pro lib % node lib.spec.mjs
+add() should add two numbers 
+  🚫 fail
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+10 !== 7
+
+    at file:///Users/yusuf/Documents/course/Git/node-js/lib/lib.spec.mjs:6:10
+    at ModuleJob.run (internal/modules/esm/module_job.js:152:23)
+    at async Loader.import (internal/modules/esm/loader.js:166:24)
+    at async Object.loadESM (internal/process/esm_loader.js:68:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 10,
+  expected: 7,
+  operator: 'strictEqual'
+}
+```
+
+### JEST
+
+Jest is a testing lib created by Facebook. Its a wonderful tesitng lib for any situation. Let's give it a try! Create a new package with npm and install jest
+
+npm install jest --save-dev
+
+Notice we used the --save-dev flag this time. We want to save jest in our package.json but as a dev dependency. Because our code does not depend on jest at runtime to execute. When your app gets deployed or installed by another dev, those machines will only NEED to install dependencies and not dev dependency. Saving space and time.
+
+```js
+// utils.js
+
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+const users = [{ email: 'goku@test.com', id: 1, name: 'Goku', verified: false }]
+
+const getNewUser = async id => {
+  await delay(100)
+  const user = users.find(u => u.id === id)
+
+  if (!user) throw new Error('User does not exist')
+  return user
+}
+
+const mapObjectToArray = (o, cb) => {
+  const results = []
+
+  for (const [k, v] of Object.entries(o)) {
+    results.push(cb(k, v, o))
+  }
+
+  return results
+}
+
+module.exports = { getNewUser, mapObjectToArray }
+```
+
+```js
+const { mapObjectToArray, getNewUser } = require('./myLib')
+
+describe('getNewUser', () => {
+  test('user does exist', async () => {
+    const user = await getNewUser(1)
+
+    expect(user).toBeTruthy()
+    expect(user.verified).toBe(false)
+  })
+
+  test('user does not exist', async () => {
+    expect.assertions(1)
+
+    try {
+      await getNewUser(3)
+    } catch (e) {
+      expect(e.message).toBe('User does not exist')
+    }
+  })
+})
+
+describe('mapObjectToArray', () => {
+  test('callback gets called for each value', () => {
+    const mock = jest.fn()
+
+    mapObjectToArray({ a: 1, b: 1, c: 1 }, mock)
+    expect(mock.mock.calls.length).toBe(3)
+  })
+
+  test('callback gets the right args', () => {
+    const mockCb = jest.fn()
+    const o = { a: 1, b: 1, c: 1 }
+
+    mapObjectToArray(o, mockCb)
+    const firstCall = mockCb.mock.calls[0]
+
+    expect(firstCall[0]).toBe('a')
+    expect(firstCall[1]).toBe(1)
+    expect(firstCall[2]).toBe(o)
+  })
+})
+```
+
+```sh
+yusuf@Yusufs-MacBook-Pro node-js % cd lib 
+yusuf@Yusufs-MacBook-Pro lib % npm test
+
+> try_node_js@1.0.0 test /Users/yusuf/Documents/course/Git/node-js
+> jest
+
+ PASS  lib/utils.spec.js
+  getNewUser
+    ✓ user does exist (103 ms)
+    ✓ user does not exist (106 ms)
+  mapObjectToArray
+    ✓ callback gets called for each value (3 ms)
+    ✓ callback gets the right args (1 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        0.496 s
+Ran all test suites.
+```
+
+## Resource
+
+https://intro-to-nodejs-v2-site.vercel.app/
